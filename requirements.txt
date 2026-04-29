@@ -1,0 +1,12 @@
+lightning
+pytorch-lightning
+librosa
+soundfile
+pandas
+matplotlib
+scikit-learn
+ipykernel
+jupyter
+wandb
+python-dotenv
+pyyaml

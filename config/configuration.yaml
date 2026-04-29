@@ -1,0 +1,85 @@
+# =============================================================================
+# RF Denoiser — Configuración centralizada del proyecto
+# =============================================================================
+
+# ── Audio ─────────────────────────────────────────────────────────────────────
+audio:
+  sample_rate: 16000          # Hz de muestreo objetivo
+  n_fft: 512                  # Tamaño de la ventana FFT
+  hop_length: 256             # Desplazamiento entre frames del espectrograma
+  segment_length: 2           # Duración en segundos de cada segmento de audio
+  noise_level: 0.3            # Factor de mezcla del ruido al crear segmentos (0–1)
+
+# ── Entrenamiento ─────────────────────────────────────────────────────────────
+training:
+  batch_size: 8
+  epochs: 100
+  learning_rate: 0.0005
+  num_workers: 0              # Workers del DataLoader (0 = main process)
+
+# ── Callbacks ─────────────────────────────────────────────────────────────────
+callbacks:
+  early_stopping:
+    patience: 10
+    monitor: val_loss
+    mode: min
+  checkpoint:
+    save_top_k: 1
+    monitor: val_loss
+    mode: min
+
+# ── Rutas de datos ────────────────────────────────────────────────────────────
+data:
+  train:
+    noise_file: training_data/noise_3_pink_noise_1800s.wav
+    voice_file: training_data/voice_3_20251218_013122_radio_1800s.wav
+  test:
+    noise_file: training_data/noise_1_pink_noise_360s.wav
+    voice_file: training_data/voice_1_20260106_093734_grant_360s.wav
+
+# ── Directorios de salida ─────────────────────────────────────────────────────
+paths:
+  checkpoints_dir: checkpoints
+  logs_dir: logs
+  results_dir: results
+
+# ── Weights & Biases ──────────────────────────────────────────────────────────
+wandb:
+  project: RF-Denoiser
+  log_model: false
+
+# ── Evaluación ────────────────────────────────────────────────────────────────
+evaluation:
+  inference_iterations: 100   # Iteraciones para promediar el tiempo de inferencia
+  warmup_iterations: 10       # Iteraciones de warm-up previas a la medición
+
+# ── Arquitecturas de los modelos ──────────────────────────────────────────────
+models:
+  gru:
+    input_size: 257           # N_FFT // 2 + 1
+    hidden_size: 128
+    num_layers: 2
+    bidirectional: true
+
+  lstm:
+    input_size: 257           # N_FFT // 2 + 1
+    hidden_size: 128
+    num_layers: 2
+    bidirectional: true
+
+  crn:
+    # Encoder CNN: 3 bloques Conv2d (16 → 32 → 64 canales, MaxPool2d x2)
+    encoder_channels: [16, 32, 64]
+    # LSTM interno
+    lstm_input_size: 128
+    lstm_hidden_size: 128
+    lstm_num_layers: 2
+    lstm_bidirectional: true
+
+  transformer:
+    input_size: 257           # N_FFT // 2 + 1
+    d_model: 256
+    nhead: 4
+    num_layers: 4
+    dim_feedforward_multiplier: 4   # dim_feedforward = d_model * multiplier
+    max_seq_len: 1000         # Longitud máxima del positional encoding

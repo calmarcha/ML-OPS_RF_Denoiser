@@ -1,0 +1,40 @@
+# ── Entorno virtual ───────────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# ── Secretos ──────────────────────────────────────────────────────────────────
+.env
+
+# ── Datos de entrenamiento (ficheros de audio grandes) ────────────────────────
+training_data/
+
+# ── Artefactos de entrenamiento (binarios grandes) ───────────────────────────
+checkpoints/
+models/
+
+# ── Logs generados en ejecución ──────────────────────────────────────────────
+logs/
+
+# ── Caché local de Weights & Biases ──────────────────────────────────────────
+wandb/
+
+# ── Jupyter ───────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ── VS Code ───────────────────────────────────────────────────────────────────
+.vscode/
+
+# ── Sistema operativo ─────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
