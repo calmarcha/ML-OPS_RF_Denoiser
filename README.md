@@ -61,8 +61,8 @@ Todos los modelos se entrenan con **PyTorch Lightning**, se monitorizan con **We
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/calmarcha/ML-OPS-RF-Denoiser.git
-cd ML-OPS-RF-Denoiser
+git clone https://github.com/calmarcha/ML-OPS_RF_Denoiser.git
+cd ML-OPS_RF_Denoiser
 
 # 2. Crear y activar entorno virtual
 python -m venv .venv
@@ -110,7 +110,7 @@ cp .env.example .env
 Edita `.env`:
 
 ```
-WANDB_API_KEY=tu_clave_de_api_aqui
+WANDB_API_KEY=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
 ```
 
 Obtén tu clave en [wandb.ai/settings](https://wandb.ai/settings).

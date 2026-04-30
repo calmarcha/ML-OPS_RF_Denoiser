@@ -20,7 +20,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import librosa
 
-from config import HOP_LENGTH, SAMPLE_RATE
+from config import HOP_LENGTH, SAMPLE_RATE, FIGURES_DIR
+
+_FIGURES_DIR = Path(FIGURES_DIR)
+_FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 
 
 # ── Colores por modelo ────────────────────────────────────────────────────────
@@ -39,6 +42,7 @@ def plot_training_times(results: dict) -> None:
     plt.title('Comparación de Tiempos de Entrenamiento', fontsize=14, fontweight='bold')
     plt.grid(axis='y', alpha=0.3)
     plt.tight_layout()
+    plt.savefig(_FIGURES_DIR / 'training_times.png', dpi=150, bbox_inches='tight')
     plt.show()
 
 
@@ -69,6 +73,7 @@ def plot_loss_curves(results: dict) -> None:
     plt.grid(alpha=0.3)
 
     plt.tight_layout()
+    plt.savefig(_FIGURES_DIR / 'loss_curves.png', dpi=150, bbox_inches='tight')
     plt.show()
 
 
@@ -93,6 +98,7 @@ def plot_inference_times(inference_times: dict, real_time_ms: float = 2000.0) ->
         )
 
     plt.tight_layout()
+    plt.savefig(_FIGURES_DIR / 'inference_times.png', dpi=150, bbox_inches='tight')
     plt.show()
 
     print("\n" + "="*60)
@@ -133,6 +139,7 @@ def plot_val_vs_test(results: dict, test_results: dict) -> None:
                  f'{bar.get_height():.4f}', ha='center', va='bottom', fontsize=9)
 
     plt.tight_layout()
+    plt.savefig(_FIGURES_DIR / 'val_vs_test.png', dpi=150, bbox_inches='tight')
     plt.show()
 
     print("\n" + "="*80)
@@ -185,4 +192,5 @@ def plot_spectrograms(
     ax3.set_xlabel('Tiempo (s)', fontsize=12)
 
     plt.tight_layout()
+    plt.savefig(_FIGURES_DIR / f'spectrograms_{model_name}.png', dpi=150, bbox_inches='tight')
     plt.show()

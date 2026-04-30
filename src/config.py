@@ -38,6 +38,7 @@ TEST_VOICE_FILE = _cfg["data"]["test"]["voice_file"]
 CHECKPOINTS_DIR = _cfg["paths"]["checkpoints_dir"]
 LOGS_DIR        = _cfg["paths"]["logs_dir"]
 RESULTS_DIR     = _cfg["paths"]["results_dir"]
+FIGURES_DIR     = _cfg["paths"]["figures_dir"]
 
 # ── W&B ──────────────────────────────────────────────────────────────────────
 WANDB_PROJECT = _cfg["wandb"]["project"]

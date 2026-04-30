@@ -42,6 +42,7 @@ paths:
   checkpoints_dir: checkpoints
   logs_dir: logs
   results_dir: results
+  figures_dir: results/figures
 
 # ── Weights & Biases ──────────────────────────────────────────────────────────
 wandb:

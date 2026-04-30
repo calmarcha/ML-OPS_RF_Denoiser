@@ -93,6 +93,7 @@ def train_model(
         project=WANDB_PROJECT,
         name=model_name,
         log_model=False,
+        reinit=True,
         config={
             'model':          model_name,
             'epochs':         epochs,
