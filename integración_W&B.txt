@@ -1,18 +1,18 @@
-================================================================================
+﻿================================================================================
   INTEGRACIÓN DE WEIGHTS & BIASES (W&B) EN EL PROYECTO RF DENOISER
   Almarcha Arias, G. Carlos — MLOps — Abril 2026
 ================================================================================
 
 OBJETIVO
 --------
-Incorporar Weights & Biases al proyecto modular RF Denoiser para registrar,
-comparar y visualizar de forma centralizada todos los experimentos de
-entrenamiento de los cuatro modelos (GRU, LSTM, CRN, Transformer), incluyendo
-hiperparámetros, curvas de pérdida, tiempos de entrenamiento, tiempos de
-inferencia y métricas de evaluación sobre datos de test no vistos.
+Incorporar Weights & Biases al proyecto modular RF Denoiser para registrar
+y visualizar de forma centralizada el experimento de entrenamiento del modelo
+Transformer, incluyendo hiperparámetros, curvas de pérdida, tiempo de
+entrenamiento, tiempo de inferencia y métricas de evaluación sobre datos de
+test no vistos.
 
-El proyecto NO es un notebook consolidado, sino un paquete Python modular
-organizado en el directorio src/ con los siguientes ficheros relevantes:
+El proyecto es un paquete Python modular organizado en el directorio src/
+con los siguientes ficheros relevantes:
 
     src/
         config.py          — Carga hiperparámetros y rutas desde el YAML
@@ -87,7 +87,7 @@ Contiene dos elementos:
 
         class PersistentWandbLogger(WandbLogger):
             def finalize(self, status: str) -> None:
-                pass  # El run se cierra manualmente en Paso 10 de main.py
+                pass  # El run se cierra manualmente en Paso 9 de main.py
 
   b) Función setup_wandb():
      Carga la clave API desde el entorno (o desde .env vía load_dotenv),
@@ -110,16 +110,16 @@ Contiene dos elementos:
 --------------------------------------------------------------------------------
 PASO 5 — FUNCIÓN train_model() EN src/train.py
 --------------------------------------------------------------------------------
-La función train_model() crea un run W&B por cada modelo entrenado.
+La función train_model() crea el run W&B para el modelo Transformer.
 Los elementos clave son:
 
   a) Se instancia PersistentWandbLogger con los hiperparámetros del run:
         wandb_logger = PersistentWandbLogger(
             project=WANDB_PROJECT,
-            name=model_name,       # nombre del run = nombre del modelo
-            log_model=False,       # no sube checkpoints a W&B
+            name='Transformer',
+            log_model=False,
             config={
-                'model':          model_name,
+                'model':          'Transformer',
                 'epochs':         epochs,
                 'batch_size':     BATCH_SIZE,
                 'learning_rate':  LEARNING_RATE,
@@ -135,7 +135,7 @@ Los elementos clave son:
   b) El Trainer de Lightning usa una lista de dos loggers simultáneos:
         logger=[csv_logger, wandb_logger]
      Lightning envía train_loss y val_loss a ambos destinos en paralelo:
-     al fichero CSV local (logs/<modelo>/version_N/metrics.csv) y a W&B.
+     al fichero CSV local (logs/Transformer/version_N/metrics.csv) y a W&B.
      La frecuencia de log para train_loss es cada log_every_n_steps=5 pasos;
      val_loss se registra al final de cada época de validación.
 
@@ -171,56 +171,45 @@ realiza en los siguientes puntos:
         from logging_config import setup_wandb
         setup_wandb()
 
-  Paso 4-6 — Entrenamiento:
-    Se itera sobre los cuatro modelos y se llama a train_model() para cada
-    uno. El wandb_logger queda almacenado en el diccionario results[nombre].
+  Paso 4 — Entrenamiento:
+    Se crea el modelo Transformer y se llama a train_model(). El wandb_logger
+    queda almacenado en el diccionario result.
 
-        for model_cls, model_name in [...]:
-            model = model_cls()
-            results[model_name] = train_model(model, model_name, ...)
+        model = TransformerDenoiser()
+        result = train_model(model, 'Transformer', train_dataset, val_dataset)
 
-  Paso 8 — Tiempos de inferencia:
-    Tras medir los tiempos con measure_inference_time(), se registran en W&B:
+  Paso 6 — Tiempo de inferencia:
+    Tras medir el tiempo con measure_inference_time(), se registra en W&B:
 
-        for name, t in inference_times.items():
-            ratio = 2000.0 / t   # veces más rápido que tiempo real (2 s)
-            results[name]['wandb_logger'].experiment.log({
-                'inference_time_ms': t,
-                'realtime_ratio':    ratio,
-            })
+        result['wandb_logger'].experiment.log({
+            'inference_time_ms': inference_time_ms,
+            'realtime_ratio':    realtime_ratio,
+        })
 
-  Paso 8.5 — Evaluación en test:
+  Paso 7 — Evaluación en test:
     Tras evaluate_on_test(), se calcula el gap val/test y se registra en W&B:
 
-        for name in results:
-            val_loss  = results[name]['metrics']['val_loss'].dropna().min()
-            test_loss = test_results[name]['test_loss']
-            gap       = ((test_loss - val_loss) / val_loss) * 100
-            results[name]['wandb_logger'].experiment.log({
-                'test_l1_loss':     test_results[name]['test_loss'],
-                'test_mse':         test_results[name]['test_mse'],
-                'test_rmse':        test_results[name]['test_rmse'],
-                'val_test_gap_pct': gap,
-            })
+        result['wandb_logger'].experiment.log({
+            'test_l1_loss':     test_metrics['test_loss'],
+            'test_mse':         test_metrics['test_mse'],
+            'test_rmse':        test_metrics['test_rmse'],
+            'val_test_gap_pct': gap,
+        })
 
     Un gap negativo indica que el modelo generaliza mejor en test que en
     validación (ausencia de sobreajuste).
 
-  Paso 10 — Guardar resultados y cerrar runs:
-    La tabla comparativa (guardada también en CSV) se sube a W&B y todos los
-    runs se cierran explícitamente para garantizar la sincronización:
+  Paso 9 — Guardar resultados y cerrar run:
+    El run se cierra explícitamente para garantizar la sincronización:
 
-        summary_table = wandb.Table(dataframe=summary_full_df)
-        for name, result in results.items():
-            result['wandb_logger'].experiment.log({'comparison_table': summary_table})
-            result['wandb_logger'].experiment.finish()
+        result['wandb_logger'].experiment.finish()
 
 
 --------------------------------------------------------------------------------
-RESUMEN DE MÉTRICAS REGISTRADAS POR RUN EN W&B
+RESUMEN DE MÉTRICAS REGISTRADAS EN EL RUN W&B
 --------------------------------------------------------------------------------
-Cada modelo (GRU, LSTM, CRN, Transformer) genera un run independiente en el
-proyecto "RF-Denoiser" con las siguientes métricas y metadatos:
+El modelo Transformer genera un run en el proyecto "RF-Denoiser" con las
+siguientes métricas y metadatos:
 
   Configuración (config — registrada al crear el logger en train.py):
     - model, epochs, batch_size, learning_rate
@@ -234,29 +223,26 @@ proyecto "RF-Denoiser" con las siguientes métricas y metadatos:
     - training_time_s
     - best_val_loss
 
-  Métricas de inferencia (registradas en main.py — Paso 8):
+  Métricas de inferencia (registradas en main.py — Paso 6):
     - inference_time_ms
     - realtime_ratio
 
-  Métricas de evaluación en test (registradas en main.py — Paso 8.5):
+  Métricas de evaluación en test (registradas en main.py — Paso 7):
     - test_l1_loss
     - test_mse
     - test_rmse
     - val_test_gap_pct
 
-  Artefacto tabular (registrado en main.py — Paso 10):
-    - comparison_table  (tabla comparativa completa de todos los modelos)
-
 
 --------------------------------------------------------------------------------
 ACCESO A LOS RESULTADOS
 --------------------------------------------------------------------------------
-Los runs quedan disponibles en:
+El run queda disponible en:
     https://wandb.ai/<tu_usuario>/RF-Denoiser
 
 Desde el dashboard de W&B se puede:
-  - Comparar curvas de pérdida de los cuatro modelos en una misma gráfica
-  - Ordenar runs por cualquier métrica (test_rmse, inference_time_ms, etc.)
+  - Visualizar las curvas de pérdida de entrenamiento y validación
+  - Consultar todas las métricas de inferencia y test en el resumen del run
   - Filtrar experimentos por hiperparámetros (batch_size, learning_rate, etc.)
   - Descargar los datos en CSV para análisis offline
   - Compartir resultados con otros colaboradores mediante el enlace del proyecto

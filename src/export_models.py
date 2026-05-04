@@ -1,5 +1,5 @@
 """
-Exporta el mejor checkpoint (.ckpt) de cada arquitectura como archivo .pth
+Exporta el mejor checkpoint (.ckpt) del Transformer como archivo .pth
 (state_dict de PyTorch) en la carpeta models/.
 
 Uso:
@@ -18,16 +18,10 @@ if str(_SRC_DIR) not in sys.path:
 
 import torch
 
-from model_GRU         import GRUDenoiser
-from model_LSTM        import LSTMDenoiser
-from model_CRN         import CRNDenoiser
 from model_transformer import TransformerDenoiser
 
 # Mapeo: nombre → clase Lightning
 MODEL_CLASSES = {
-    "GRU":         GRUDenoiser,
-    "LSTM":        LSTMDenoiser,
-    "CRN":         CRNDenoiser,
     "Transformer": TransformerDenoiser,
 }
 

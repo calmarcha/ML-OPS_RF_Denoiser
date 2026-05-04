@@ -1,23 +1,22 @@
-# RF Denoiser — MLOps
+﻿# RF Denoiser — MLOps (Transformer)
 
 **Almarcha Arias, G. Carlos** · Master en Deep Learning 2025–2026 · Asignatura MLOps
 
-Proyecto de eliminación de ruido en señales de radio frecuencia (RF) mediante cuatro arquitecturas de red neuronal entrenadas y comparadas con un pipeline MLOps completo.
+Proyecto de eliminación de ruido en señales de radio frecuencia (RF) mediante un modelo Transformer entrenado con un pipeline aplicando buenas prácticas de MLOps.
 
 ---
 
 ## Descripción
 
-El sistema procesa señales de audio en el **dominio frecuencial** (espectrogramas de magnitud). Cuatro modelos compiten bajo las mismas condiciones de entrenamiento, validación y test:
+El sistema procesa señales de audio en el **dominio de la frecuencia** (espectrogramas de magnitud). El modelo Transformer opera sobre los 257 bins de la STFT (Short Time Fourier Transform) y elimina el ruido aplicando atención multi-cabeza sobre la dimensión temporal.
 
-| Modelo | Arquitectura | Parámetros clave |
-|---|---|---|
-| **GRU** | GRU bidireccional × 2 capas, 128 unidades | entrada 257 bins STFT |
-| **LSTM** | LSTM bidireccional × 2 capas, 128 unidades | entrada 257 bins STFT |
-| **CRN** | Convolutional Recurrent Network (encoder-GRU-decoder) | skip connections |
-| **Transformer** | Encoder Transformer con positional encoding | 4 cabezas de atención |
+- **Arquitectura**: Encoder Transformer con positional encoding
+- **Entrada**: 257 bins STFT (N_FFT/2 + 1)
+- **d_model**: 256
+- **Cabezas de atención**: 4
+- **Capas Transformer**: 4
 
-Todos los modelos se entrenan con **PyTorch Lightning**, se monitorizan con **Weights & Biases** y toda su configuración reside en un único fichero YAML.
+El modelo se entrena con **PyTorch Lightning**, se monitoriza con **Weights & Biases** y toda la configuración reside en un único fichero YAML.
 
 ---
 
@@ -31,16 +30,16 @@ Todos los modelos se entrenan con **PyTorch Lightning**, se monitorizan con **We
 │   ├── config.py            # Carga configuration.yaml y expone constantes
 │   ├── data.py              # Carga de audio, espectrogramas y Dataset
 │   ├── logging_config.py    # PersistentWandbLogger + setup_wandb()
-│   ├── model_GRU.py         # Arquitectura GRU
-│   ├── model_LSTM.py        # Arquitectura LSTM
-│   ├── model_CRN.py         # Arquitectura CRN
 │   ├── model_transformer.py # Arquitectura Transformer
 │   ├── train.py             # Función train_model() con loggers CSV + W&B
 │   ├── evaluate.py          # Inferencia y métricas de test
-│   ├── visualize.py         # Gráficas de pérdida, espectrogramas e inferencia
+│   ├── visualize.py         # Gráficas de pérdida y espectrogramas
 │   ├── export_models.py     # Exportación de pesos a models/
 │   └── main.py              # Orquestador del pipeline completo
-├── results/                 # CSVs generados (métricas, tiempos, resumen)
+├── tests/
+│   └── test_data.py         # Tests de procesado de audio y AudioDenoisingDataset
+├── results/                 # CSVs generados (métricas, tiempos, test)
+├── pytest.ini               # Configuración de pytest (pythonpath = src)
 ├── requirements.txt
 ├── .env.example             # Plantilla para la clave API de W&B
 └── integración_W&B.txt      # Documentación detallada de la integración W&B
@@ -97,6 +96,13 @@ training:
 
 wandb:
   project: RF-Denoiser
+
+models:
+  transformer:
+    input_size: 257
+    d_model: 256
+    nhead: 4
+    num_layers: 4
 ```
 
 ### 2. Clave API de W&B — `.env`
@@ -110,7 +116,7 @@ cp .env.example .env
 Edita `.env`:
 
 ```
-WANDB_API_KEY=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
+WANDB_API_KEY=tu_clave_api_aquí
 ```
 
 Obtén tu clave en [wandb.ai/settings](https://wandb.ai/settings).
@@ -133,27 +139,26 @@ El script ejecuta en orden:
 
 1. Login en W&B y detección de dispositivo (CPU / GPU)
 2. Carga y segmentación de los audios de entrenamiento
-3. Entrenamiento de GRU, LSTM, CRN y Transformer
-4. Análisis de tiempos de entrenamiento y curvas de pérdida
-5. Medición de tiempos de inferencia
+3. Entrenamiento del modelo Transformer
+4. Análisis de tiempo de entrenamiento y curvas de pérdida
+5. Medición de tiempo de inferencia
 6. Evaluación en el dataset de test (audio no visto durante el entrenamiento)
-7. Visualización de espectrogramas con el mejor modelo
-8. Guardado de resultados en `results/` y cierre de runs W&B
+7. Visualización de espectrogramas
+8. Guardado de resultados en `results/` y cierre del run W&B
 
 ---
 
 ## Integración con Weights & Biases
 
-Cada modelo genera un **run independiente** en el proyecto `RF-Denoiser` de W&B con:
+El modelo Transformer genera un **run** en el proyecto `RF-Denoiser` de W&B con:
 
 - **Config**: hiperparámetros completos del experimento
 - **Métricas por época**: `train_loss`, `val_loss`
 - **Resumen post-entrenamiento**: `training_time_s`, `best_val_loss`
 - **Inferencia**: `inference_time_ms`, `realtime_ratio`
 - **Test**: `test_l1_loss`, `test_mse`, `test_rmse`, `val_test_gap_pct`
-- **Tabla comparativa**: `comparison_table` con el resumen de todos los modelos
 
-Los runs quedan disponibles en:
+El run queda disponible en:
 `https://wandb.ai/calmarcha/RF-Denoiser`
 
 Consulta [integración_W&B.txt](integración_W&B.txt) para la documentación completa de la integración.
@@ -166,13 +171,36 @@ Los ficheros CSV generados en `results/` incluyen:
 
 | Fichero | Contenido |
 |---|---|
-| `model_comparison_summary.csv` | Resumen comparativo de los cuatro modelos |
-| `inference_times.csv` | Tiempos de inferencia por modelo |
+| `Transformer_metrics.csv` | Curvas de pérdida por época |
+| `inference_times.csv` | Tiempo de inferencia y ratio de tiempo real |
 | `test_results.csv` | Métricas de evaluación en test |
-| `GRU_metrics.csv` / `LSTM_metrics.csv` / ... | Curvas de pérdida por modelo |
+
+---
+
+## Tests
+
+El proyecto incluye una suite de tests automatizados ejecutables con **pytest**.
+
+```bash
+# Desde la raíz del proyecto
+pytest tests/ -v
+```
+
+| Fichero | Módulo bajo prueba | Nº tests |
+|---|---|---|
+| `tests/test_data.py` | `src/data.py` | 15 |
+
+El fichero `pytest.ini` en la raíz del proyecto configura `pythonpath = src`, lo que permite a pytest resolver las importaciones sin necesidad de ficheros adicionales.
+
+### `test_data.py`
+
+- **`TestAudioToSpectrogram`** — forma de salida, bins de frecuencia, magnitud ≥ 0, fase en [−π, π], dtype float.
+- **`TestSpectrogramToAudio`** — reconstrucción produce array 1-D, longitud cercana a la original, valores finitos.
+- **`TestCreateSegments`** — número de segmentos, longitud exacta, segmento ruidoso ≠ limpio.
+- **`TestAudioDenoisingDataset`** — longitud del dataset, tipos de tensores, forma `[1, F, T]`, dtype float32.
 
 ---
 
 ## Licencia
 
-Proyecto académico — Master en Deep Learning, Abril 2026.
+Proyecto académico — Master en Deep Learning, Abril–Mayo 2026.
