@@ -1,0 +1,51 @@
+# ── Entorno virtual ───────────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# ── Secretos ──────────────────────────────────────────────────────────────────
+.env
+
+# ── Datos de entrenamiento (grandes; se montan como volumen) ─────────────────
+training_data/
+
+# ── Artefactos de entrenamiento (checkpoints pesados) ───────────────────────
+checkpoints/
+
+# ── Logs generados en ejecución ──────────────────────────────────────────────
+logs/
+
+# ── Caché local de Weights & Biases ──────────────────────────────────────────
+wandb/
+
+# ── Resultados (se generan en ejecución; se montan como volumen) ─────────────
+results/
+
+# ── Tests (no necesarios en la imagen) ───────────────────────────────────────
+tests/
+pytest.ini
+
+# ── Control de versiones ─────────────────────────────────────────────────────
+.git/
+.gitignore
+
+# ── VS Code ───────────────────────────────────────────────────────────────────
+.vscode/
+
+# ── Documentación ────────────────────────────────────────────────────────────
+README.md
+integración_W&B.txt
+
+# ── Sistema operativo ─────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db

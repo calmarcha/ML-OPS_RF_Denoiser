@@ -39,6 +39,8 @@ El modelo se entrena con **PyTorch Lightning**, se monitoriza con **Weights & Bi
 ├── tests/
 │   └── test_data.py         # Tests de procesado de audio y AudioDenoisingDataset
 ├── results/                 # CSVs generados (métricas, tiempos, test)
+├── Dockerfile               # Imagen Docker con el pipeline completo
+├── .dockerignore            # Exclusiones del contexto de build
 ├── pytest.ini               # Configuración de pytest (pythonpath = src)
 ├── requirements.txt
 ├── .env.example             # Plantilla para la clave API de W&B
@@ -174,6 +176,44 @@ Los ficheros CSV generados en `results/` incluyen:
 | `Transformer_metrics.csv` | Curvas de pérdida por época |
 | `inference_times.csv` | Tiempo de inferencia y ratio de tiempo real |
 | `test_results.csv` | Métricas de evaluación en test |
+
+---
+
+## Docker
+
+La imagen incluye el modelo Transformer con los hiperparámetros que han obtenido el mejor resultado:
+
+| Hiperparámetro | Valor |
+|---|---|
+| `sample_rate` | 16 000 Hz |
+| `n_fft` | 512 |
+| `hop_length` | 256 |
+| `segment_length` | 2 s |
+| `batch_size` | 8 |
+| `learning_rate` | 0.0005 |
+| `d_model` | 256 |
+| `nhead` | 4 |
+| `num_layers` | 4 |
+
+**Métricas obtenidas** (`test_results.csv`): Test L1 Loss = 0.1201 · Test RMSE = 0.2688
+
+### Construir la imagen
+
+```bash
+docker build -t rf-denoiser .
+```
+
+### Ejecutar el pipeline
+
+```bash
+docker run --rm \
+  -v /ruta/local/training_data:/app/training_data \
+  -v /ruta/local/results:/app/results \
+  -e WANDB_API_KEY=tu_clave_api \
+  rf-denoiser
+```
+
+> `training_data/` se monta desde el host porque los ficheros WAV son demasiado grandes para incluirlos en la imagen. Los resultados (CSVs y figuras) se persisten en el volumen `results/`.
 
 ---
 
