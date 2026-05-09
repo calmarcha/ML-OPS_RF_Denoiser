@@ -3,7 +3,20 @@
 **Almarcha Arias, G. Carlos** · Master en Deep Learning 2025–2026 · Asignatura MLOps
 
 Proyecto de eliminación del ruido rosa en la voz demodulada en radiocomunicaciones, mediante un modelo Transformer entrenado con diferentes ficheros de audio con voces y ruido rosa, aplicando buenas prácticas de MLOps.
+
 ---
+## Herramientas vistas en MLOps utilizadas:
+
+- **GitHub**: Plataforma de control de versiones distribuido basada en Git. Permite versionar el código, gestionar ramas, revisar cambios y colaborar en equipo. En este proyecto se usa para alojar el repositorio y aplicar la convención de Conventional Commits.
+
+- **Weights & Biases (W&B)**: Plataforma de MLOps para el seguimiento de experimentos. Registra automáticamente hiperparámetros, métricas por época (pérdida de entrenamiento y validación), tiempos de inferencia y resultados de test, facilitando la comparación de experimentos.
+
+- **Docker**: Herramienta de contenedorización que empaqueta la aplicación junto con todas sus dependencias en una imagen reproducible. Garantiza que el pipeline se ejecute de forma idéntica en cualquier entorno (local, servidor, nube).
+
+- **Pytest**: Framework de testing para Python. Se utiliza para ejecutar la suite de tests automatizados de `src/data.py`, verificando el procesado de audio, la generación de espectrogramas y el comportamiento del dataset.
+
+---
+
 ## Enlaces a Github y Weights & Biases
 
 https://github.com/calmarcha/ML-OPS_RF_Denoiser
