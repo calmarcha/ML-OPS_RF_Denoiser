@@ -1,6 +1,6 @@
 ﻿# RF Denoiser - MLOps (Transformer)
 
-**Almarcha Arias, G. Carlos** · Master en Deep Learning 2025–2026 · Asignatura MLOps
+## Almarcha Arias, G. Carlos · Master en Deep Learning 2025–2026 · Asignatura MLOps
 
 Este proyecto es para la eliminación del ruido rosa en la voz demodulada en radiocomunicaciones, mediante un modelo Transformer entrenado con diferentes ficheros de audio con voces y ruido rosa, aplicando buenas prácticas de MLOps. 
 
@@ -216,7 +216,9 @@ Los ficheros CSV generados en `results/` incluyen:
 Fichero / Contenido:
 
 -`Transformer_metrics.csv`: Curvas de pérdida por época
+
 -`inference_times.csv`: Tiempo de inferencia y ratio de tiempo real
+
 -`test_results.csv`: Métricas de evaluación en test
 
 ---
