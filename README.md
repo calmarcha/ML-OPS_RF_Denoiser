@@ -257,9 +257,9 @@ El proyecto incluye una suite de tests automatizados ejecutables con **pytest**.
 pytest tests/ -v
 ```
 
-| Fichero | Módulo bajo prueba | Nº tests |
-|---|---|---|
-| `tests/test_data.py` | `src/data.py` | 15 |
+- Fichero: `tests/test_data.py`
+- Módulo bajo prueba: `src/data.py`
+- Nº de tests: 4
 
 El fichero `pytest.ini` en la raíz del proyecto configura `pythonpath = src`, lo que permite a pytest hacer las importaciones sin necesidad de ficheros adicionales.
 
