@@ -213,11 +213,11 @@ Repositorio:
 
 Los ficheros CSV generados en `results/` incluyen:
 
-| Fichero | Contenido |
-|---|---|
-| `Transformer_metrics.csv` | Curvas de pérdida por época |
-| `inference_times.csv` | Tiempo de inferencia y ratio de tiempo real |
-| `test_results.csv` | Métricas de evaluación en test |
+Fichero / Contenido:
+
+-`Transformer_metrics.csv`: Curvas de pérdida por época
+-`inference_times.csv`: Tiempo de inferencia y ratio de tiempo real
+-`test_results.csv`: Métricas de evaluación en test
 
 ---
 
