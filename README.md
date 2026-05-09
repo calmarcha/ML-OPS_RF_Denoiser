@@ -20,7 +20,7 @@ https://wandb.ai/calmarcha-universidad-polit-cnica-de-madrid/RF-Denoiser/table?n
 
 - **Weights & Biases (W&B)**: Plataforma de MLOps para el seguimiento de experimentos. Registra automáticamente hiperparámetros, métricas por época (pérdida de entrenamiento y validación), tiempos de inferencia y resultados de test, facilitando la comparación de experimentos. En nuestro proyecto, se han guardado 3 experimentos (runs) probando diferentes valores de batch size.
 
-- **Docker**: Herramienta de contenedorización que empaqueta la aplicación junto con todas sus dependencias en una imagen reproducible. Garantiza que el pipeline se ejecute de forma idéntica en cualquier entorno (local, servidor, nube).
+- **Docker**: Herramienta de contenedorización que empaqueta la aplicación junto con todas sus dependencias en una imagen reproducible. Garantiza que el pipeline se ejecute de forma idéntica en cualquier entorno (local, servidor, nube). Por la naturaleza de nuestro proyecto, no se desplegará ningún contenedor en la nube, pero se incluye un Dockerfile para construir una imagen con el pipeline completo.
 
 - **Pytest**: Framework de testing para Python. Se utiliza para ejecutar la suite de tests automatizados de `src/data.py`, verificando el procesado de audio, la generación de espectrogramas y el comportamiento del dataset. Los tests se ejecutan con `pytest tests/ -v` y el fichero `pytest.ini` configura `pythonpath = src` para resolver las importaciones. En nuestro proyecto, se han implementado 4 tests unitarios para validar la correcta generación de espectrogramas y la funcionalidad del dataset.
 
