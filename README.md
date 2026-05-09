@@ -50,8 +50,8 @@ Originalmente el proyecto estaba contenido en un único notebook, pero aplicando
 - Dockerfile             # Imagen Docker con el pipeline completo
 - .dockerignore          # Exclusiones del contexto de build
 - pytest.ini             # Configuración de pytest (pythonpath = src)
-- requirements.txt
-- .env.example
+- requirements.txt       # Requisitos del proyecto
+- .env.example           # Clave de API de Weights & Biases
 
 ```
 
