@@ -32,28 +32,27 @@ El modelo se entrena con **PyTorch Lightning**, se monitoriza con **Weights & Bi
 Originalmente el proyecto estaba contenido en un único notebook, pero aplicando buenas prácticas de MLOps se ha refactorizado a una estructura modular. El código fuente se encuentra en `src/`, los tests en `tests/` y los resultados generados (CSVs, figuras) en `results/`. Los datos de entrenamiento, checkpoints, modelos exportados, logs y runs de W&B están excluidos del repositorio por contener ficheros binarios grandes o datos sensibles.
 
 ``` 
-├── config/
-│   └── configuration.yaml   # Fuente única de verdad: hiperparámetros y rutas
-├── src/
-│   ├── config.py            # Carga configuration.yaml y expone constantes
-│   ├── data.py              # Carga de audio, espectrogramas y Dataset
-│   ├── logging_config.py    # PersistentWandbLogger + setup_wandb()
-│   ├── model_transformer.py # Arquitectura Transformer
-│   ├── train.py             # Función train_model() con loggers CSV + W&B
-│   ├── evaluate.py          # Inferencia y métricas de test
-│   ├── visualize.py         # Gráficas de pérdida y espectrogramas
-│   ├── export_models.py     # Exportación de pesos a models/
-│   └── main.py              # Orquestador del pipeline completo
-├── tests/
-│   └── test_data.py         # Tests de procesado de audio y AudioDenoisingDataset
-├── results/                 # CSVs generados (métricas, tiempos, test)
-├── Dockerfile               # Imagen Docker con el pipeline completo
-├── .dockerignore            # Exclusiones del contexto de build
-├── pytest.ini               # Configuración de pytest (pythonpath = src)
-├── requirements.txt
-├── .env.example             # Plantilla para la clave API de W&B
-├── integración_W&B.txt      # Documentación detallada de la integración W&B
-└── integración_GitHub.txt   # Documentación detallada de la integración GitHub
+ config/
+  - configuration.yaml   # Fuente única de verdad: hiperparámetros y rutas
+- src/
+  - config.py            # Carga configuration.yaml y expone constantes
+  - data.py              # Carga de audio, espectrogramas y Dataset
+  - logging_config.py    # PersistentWandbLogger + setup_wandb()
+  - model_transformer.py # Arquitectura Transformer
+  - train.py             # Función train_model() con loggers CSV + W&B
+  - evaluate.py          # Inferencia y métricas de test
+  - visualize.py         # Gráficas de pérdida y espectrogramas
+  - export_models.py     # Exportación de pesos a models/
+  - main.py              # Orquestador del pipeline completo
+- tests/
+  - test_data.py         # Tests de procesado de audio y AudioDenoisingDataset
+- results/               # CSVs generados (métricas, tiempos, test)
+- Dockerfile             # Imagen Docker con el pipeline completo
+- .dockerignore          # Exclusiones del contexto de build
+- pytest.ini             # Configuración de pytest (pythonpath = src)
+- requirements.txt
+- .env.example
+
 ```
 
 > Los directorios `training_data/`, `checkpoints/`, `models/`, `logs/` y `wandb/` están excluidos del repositorio por contener ficheros binarios grandes o datos sensibles.
