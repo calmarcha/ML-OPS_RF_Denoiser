@@ -2,7 +2,7 @@
 
 **Almarcha Arias, G. Carlos** · Master en Deep Learning 2025–2026 · Asignatura MLOps
 
-Proyecto de eliminación de ruido en la voz demodulada en radiocomunicaciones, mediante un modelo Transformer entrenado con diferentes ficheros de audio con voces y ruido rosa, aplicando buenas prácticas de MLOps.
+Proyecto de eliminación del ruido rosa en la voz demodulada en radiocomunicaciones, mediante un modelo Transformer entrenado con diferentes ficheros de audio con voces y ruido rosa, aplicando buenas prácticas de MLOps.
 ---
 ## Enlaces a Github y Weights & Biases
 
@@ -14,7 +14,7 @@ https://wandb.ai/calmarcha-universidad-polit-cnica-de-madrid/RF-Denoiser/table?n
 
 ## Descripción
 
-El sistema procesa señales de audio en el **dominio de la frecuencia** (espectrogramas de magnitud). El modelo Transformer opera sobre los 257 bins de la STFT (Short Time Fourier Transform) y elimina el ruido aplicando atención multi-cabeza sobre la dimensión temporal.
+El sistema procesa señales de audio en el **dominio de la frecuencia** (espectrogramas de magnitud). El modelo Transformer opera sobre los 257 bins de la STFT (Short Time Fourier Transform) y elimina el ruido aplicando atención con 4 cabezas.
 
 - **Arquitectura**: Encoder Transformer con positional encoding
 - **Entrada**: 257 bins STFT (N_FFT/2 + 1)
