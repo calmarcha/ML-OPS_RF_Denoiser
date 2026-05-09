@@ -29,10 +29,10 @@ El modelo se entrena con **PyTorch Lightning**, se monitoriza con **Weights & Bi
 ## Estructura del proyecto
 
 ```
-Originalmente el proyecto estaba contenido en un único notebook, pero aplicando buenas prácticas de MLOps se ha refactorizado a una estructura modular. El código fuente se encuentra en `src/`, los tests en `tests/` y los resultados generados (CSVs, figuras) en `results/`. Los datos de entrenamiento, checkpoints, modelos exportados, logs y runs de W&B están excluidos del repositorio por contener ficheros binarios grandes o datos sensibles.
+Originalmente el proyecto estaba contenido en un único notebook, pero aplicando buenas prácticas de MLOps se ha refactorizado a una estructura modular. El código fuente se encuentra en `src/`, los tests en `tests/` y los resultados generados (CSVs, figuras) en `results/`. Los datos de entrenamiento, checkpoints, modelos exportados, logs y runs de W&B están excluidos del repositorio por contener ficheros binarios grandes o datos que se considera mejor no subir a GitHub.
 
 ``` 
- config/
+ - config/
   - configuration.yaml   # Fuente única de verdad: hiperparámetros y rutas
 - src/
   - config.py            # Carga configuration.yaml y expone constantes
