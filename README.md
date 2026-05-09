@@ -35,7 +35,7 @@ El sistema procesa señales de audio en el **dominio de la frecuencia** (espectr
 - **Cabezas de atención**: 4
 - **Capas Transformer**: 4
 
-El modelo se entrena con **PyTorch Lightning**, se monitoriza con **Weights & Biases** y toda **la configuración reside en un único fichero YAML**.
+El modelo se entrena con **PyTorch Lightning**, se monitoriza con **Weights & Biases** y toda **la configuración reside en un fichero YAML**.
 
 ---
 
@@ -68,7 +68,7 @@ Originalmente el proyecto estaba contenido en un único notebook, pero aplicando
 
 ```
 
-> Algunos directorios como `.venv/`, `training_data/`, `checkpoints/`, `models/`, `logs/`, `wandb/`, ...etc, están excluidos del repositorio por contener ficheros binarios grandes o datos sensibles.
+> Algunos directorios como `.venv/`, `training_data/`, `checkpoints/`, `models/`, `logs/`, `wandb/`, ...etc, están excluidos del repositorio por contener ficheros binarios grandes o datos que no se desea subir.
 
 ---
 
@@ -140,7 +140,7 @@ Editar `.env`:
 WANDB_API_KEY=la_clave_api_aquí
 ```
 
-Obtener clave en [wandb.ai/settings](https://wandb.ai/settings).
+Clave obtenida en [wandb.ai/settings](https://wandb.ai/settings).
 
 ### 3. Datos de entrenamiento
 
@@ -180,7 +180,7 @@ El modelo Transformer genera un **run** en el proyecto `RF-Denoiser` de W&B con:
 - **Test**: `test_l1_loss`, `test_mse`, `test_rmse`, `val_test_gap_pct`
 
 El run queda disponible en:
-`https://wandb.ai/calmarcha/RF-Denoiser`
+`https://wandb.ai/calmarcha-universidad-polit-cnica-de-madrid/RF-Denoiser/table?nw=nwusercalmarcha`
 
 ---
 
@@ -188,9 +188,9 @@ El run queda disponible en:
 
 El código fuente del proyecto está versionado en Git y publicado en GitHub, siguiendo las buenas prácticas de MLOps:
 
-- **`.gitignore`**: excluye `.venv/`, `.env`, `training_data/`, `checkpoints/`, `models/`, `logs/` y `wandb/`.
+- **`.gitignore`**: excluye `.venv/`, `.env`, `training_data/`, `checkpoints/`, `models/`, `logs/` y `wandb/`...etc.
 - **`.env.example`**: plantilla versionada para la clave API de W&B; el fichero `.env` real nunca se versiona.
-- **`requirements.txt`**: contrato reproducible de dependencias (`pip install -r requirements.txt`).
+- **`requirements.txt`**: lista reproducible de dependencias (`pip install -r requirements.txt`).
 - **Convención de commits**: [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `refactor:`, `docs:`, `chore:`, `test:`).
 
 Repositorio:
@@ -212,9 +212,9 @@ Los ficheros CSV generados en `results/` incluyen:
 
 ## Docker
 
-La imagen incluye el modelo Transformer con los hiperparámetros que han obtenido el mejor resultado:
+La imagen incluye el modelo Transformer con los hiperparámetros que han obtenido el mejor resultado (Validation L1 Loss = 0.1185) en el experimento registrado en W&B.:
 
-Hiperparámetro / Valor
+Hiperparámetro / Valor:
 
 `sample_rate`: 16 000 Hz 
 `n_fft`: 512
@@ -261,7 +261,7 @@ pytest tests/ -v
 |---|---|---|
 | `tests/test_data.py` | `src/data.py` | 15 |
 
-El fichero `pytest.ini` en la raíz del proyecto configura `pythonpath = src`, lo que permite a pytest resolver las importaciones sin necesidad de ficheros adicionales.
+El fichero `pytest.ini` en la raíz del proyecto configura `pythonpath = src`, lo que permite a pytest hacer las importaciones sin necesidad de ficheros adicionales.
 
 ### `test_data.py`
 
