@@ -1,8 +1,14 @@
-﻿# RF Denoiser — MLOps (Transformer)
+﻿# RF Denoiser - MLOps (Transformer)
 
 **Almarcha Arias, G. Carlos** · Master en Deep Learning 2025–2026 · Asignatura MLOps
 
-Proyecto de eliminación de ruido en señales de radio frecuencia (RF) mediante un modelo Transformer entrenado con un pipeline aplicando buenas prácticas de MLOps.
+Proyecto de eliminación de ruido en la voz demodulada en radiocomunicaciones, mediante un modelo Transformer entrenado con diferentes ficheros de audio con voces y ruido aplicando buenas prácticas de MLOps.
+---
+## Enlaces a Github y Weights & Biases
+
+https://github.com/calmarcha/ML-OPS_RF_Denoiser
+
+https://wandb.ai/calmarcha-universidad-polit-cnica-de-madrid/RF-Denoiser/table?nw=nwusercalmarcha
 
 ---
 
@@ -23,6 +29,7 @@ El modelo se entrena con **PyTorch Lightning**, se monitoriza con **Weights & Bi
 ## Estructura del proyecto
 
 ```
+Originalmente el proyecto estaba contenido en un único notebook, pero aplicando buenas prácticas de MLOps se ha refactorizado a una estructura modular con scripts organizados por funcionalidad
 .
 ├── config/
 │   └── configuration.yaml   # Fuente única de verdad: hiperparámetros y rutas
@@ -44,7 +51,8 @@ El modelo se entrena con **PyTorch Lightning**, se monitoriza con **Weights & Bi
 ├── pytest.ini               # Configuración de pytest (pythonpath = src)
 ├── requirements.txt
 ├── .env.example             # Plantilla para la clave API de W&B
-└── integración_W&B.txt      # Documentación detallada de la integración W&B
+├── integración_W&B.txt      # Documentación detallada de la integración W&B
+└── integración_GitHub.txt   # Documentación detallada de la integración GitHub
 ```
 
 > Los directorios `training_data/`, `checkpoints/`, `models/`, `logs/` y `wandb/` están excluidos del repositorio por contener ficheros binarios grandes o datos sensibles.
@@ -164,6 +172,22 @@ El run queda disponible en:
 `https://wandb.ai/calmarcha/RF-Denoiser`
 
 Consulta [integración_W&B.txt](integración_W&B.txt) para la documentación completa de la integración.
+
+---
+
+## Integración con GitHub
+
+El código fuente del proyecto está versionado en Git y publicado en GitHub, siguiendo las buenas prácticas de MLOps:
+
+- **`.gitignore`**: excluye `.venv/`, `.env`, `training_data/`, `checkpoints/`, `models/`, `logs/` y `wandb/`.
+- **`.env.example`**: plantilla versionada para la clave API de W&B; el fichero `.env` real nunca se versiona.
+- **`requirements.txt`**: contrato reproducible de dependencias (`pip install -r requirements.txt`).
+- **Convención de commits**: [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `refactor:`, `docs:`, `chore:`, `test:`).
+
+Repositorio:
+`https://github.com/calmarcha/ML-OPS_RF_Denoiser`
+
+Consulta [integración_GitHub.txt](integración_GitHub.txt) para la documentación completa de la integración.
 
 ---
 
