@@ -2,7 +2,7 @@
 
 **Almarcha Arias, G. Carlos** · Master en Deep Learning 2025–2026 · Asignatura MLOps
 
-Proyecto de eliminación de ruido en la voz demodulada en radiocomunicaciones, mediante un modelo Transformer entrenado con diferentes ficheros de audio con voces y ruido aplicando buenas prácticas de MLOps.
+Proyecto de eliminación de ruido en la voz demodulada en radiocomunicaciones, mediante un modelo Transformer entrenado con diferentes ficheros de audio con voces y ruido rosa, aplicando buenas prácticas de MLOps.
 ---
 ## Enlaces a Github y Weights & Biases
 
@@ -22,15 +22,16 @@ El sistema procesa señales de audio en el **dominio de la frecuencia** (espectr
 - **Cabezas de atención**: 4
 - **Capas Transformer**: 4
 
-El modelo se entrena con **PyTorch Lightning**, se monitoriza con **Weights & Biases** y toda la configuración reside en un único fichero YAML.
+El modelo se entrena con **PyTorch Lightning**, se monitoriza con **Weights & Biases** y toda **la configuración reside en un único fichero YAML**.
 
 ---
 
 ## Estructura del proyecto
 
 ```
-Originalmente el proyecto estaba contenido en un único notebook, pero aplicando buenas prácticas de MLOps se ha refactorizado a una estructura modular con scripts organizados por funcionalidad
-.
+Originalmente el proyecto estaba contenido en un único notebook, pero aplicando buenas prácticas de MLOps se ha refactorizado a una estructura modular. El código fuente se encuentra en `src/`, los tests en `tests/` y los resultados generados (CSVs, figuras) en `results/`. Los datos de entrenamiento, checkpoints, modelos exportados, logs y runs de W&B están excluidos del repositorio por contener ficheros binarios grandes o datos sensibles.
+
+``` 
 ├── config/
 │   └── configuration.yaml   # Fuente única de verdad: hiperparámetros y rutas
 ├── src/
