@@ -55,7 +55,7 @@ Originalmente el proyecto estaba contenido en un único notebook, pero aplicando
 
 ```
 
-> Los directorios `training_data/`, `checkpoints/`, `models/`, `logs/` y `wandb/` están excluidos del repositorio por contener ficheros binarios grandes o datos sensibles.
+> Algunos directorios como `.venv/`, `training_data/`, `checkpoints/`, `models/`, `logs/`, `wandb/`, ...etc, están excluidos del repositorio por contener ficheros binarios grandes o datos sensibles.
 
 ---
 
@@ -83,8 +83,6 @@ source .venv/bin/activate
 # 3. Instalar dependencias
 pip install -r requirements.txt
 ```
-
----
 
 ## Configuración
 
@@ -117,29 +115,29 @@ models:
 
 ### 2. Clave API de W&B — `.env`
 
-Copia la plantilla y añade tu clave:
+Copiar la plantilla y añadir la clave:
 
 ```bash
 cp .env.example .env
 ```
 
-Edita `.env`:
+Editar `.env`:
 
 ```
-WANDB_API_KEY=tu_clave_api_aquí
+WANDB_API_KEY=la_clave_api_aquí
 ```
 
-Obtén tu clave en [wandb.ai/settings](https://wandb.ai/settings).
+Obtener clave en [wandb.ai/settings](https://wandb.ai/settings).
 
 ### 3. Datos de entrenamiento
 
-Coloca los ficheros de audio en `training_data/` con los nombres indicados en `config/configuration.yaml` (sección `data`).
+Colocar los ficheros de audio en `training_data/` con los nombres indicados en `config/configuration.yaml` (sección `data`).
 
 ---
 
 ## Uso
 
-Ejecuta el pipeline completo desde la raíz del proyecto:
+Ejecutar el pipeline completo desde la raíz del proyecto:
 
 ```bash
 python src/main.py
@@ -152,7 +150,7 @@ El script ejecuta en orden:
 3. Entrenamiento del modelo Transformer
 4. Análisis de tiempo de entrenamiento y curvas de pérdida
 5. Medición de tiempo de inferencia
-6. Evaluación en el dataset de test (audio no visto durante el entrenamiento)
+6. Evaluación en el dataset de test (con audio no visto durante el entrenamiento)
 7. Visualización de espectrogramas
 8. Guardado de resultados en `results/` y cierre del run W&B
 
@@ -171,8 +169,6 @@ El modelo Transformer genera un **run** en el proyecto `RF-Denoiser` de W&B con:
 El run queda disponible en:
 `https://wandb.ai/calmarcha/RF-Denoiser`
 
-Consulta [integración_W&B.txt](integración_W&B.txt) para la documentación completa de la integración.
-
 ---
 
 ## Integración con GitHub
@@ -186,8 +182,6 @@ El código fuente del proyecto está versionado en Git y publicado en GitHub, si
 
 Repositorio:
 `https://github.com/calmarcha/ML-OPS_RF_Denoiser`
-
-Consulta [integración_GitHub.txt](integración_GitHub.txt) para la documentación completa de la integración.
 
 ---
 
@@ -207,17 +201,17 @@ Los ficheros CSV generados en `results/` incluyen:
 
 La imagen incluye el modelo Transformer con los hiperparámetros que han obtenido el mejor resultado:
 
-| Hiperparámetro | Valor |
-|---|---|
-| `sample_rate` | 16 000 Hz |
-| `n_fft` | 512 |
-| `hop_length` | 256 |
-| `segment_length` | 2 s |
-| `batch_size` | 8 |
-| `learning_rate` | 0.0005 |
-| `d_model` | 256 |
-| `nhead` | 4 |
-| `num_layers` | 4 |
+Hiperparámetro / Valor
+
+`sample_rate`: 16 000 Hz 
+`n_fft`: 512
+`hop_length`: 256
+`segment_length`: 2 s
+`batch_size`: 8
+`learning_rate`: 0.0005
+`d_model`: 256
+`nhead`: 4
+`num_layers`: 4
 
 **Métricas obtenidas** (`test_results.csv`): Test L1 Loss = 0.1201 · Test RMSE = 0.2688
 
@@ -237,7 +231,7 @@ docker run --rm \
   rf-denoiser
 ```
 
-> `training_data/` se monta desde el host porque los ficheros WAV son demasiado grandes para incluirlos en la imagen. Los resultados (CSVs y figuras) se persisten en el volumen `results/`.
+> `training_data/` se monta desde el host porque los ficheros WAV son demasiado grandes para incluirlos en la imagen. Los resultados (CSVs y figuras) se guardan en el volumen `results/`.
 
 ---
 
