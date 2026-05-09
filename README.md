@@ -268,4 +268,4 @@ El fichero `pytest.ini` en la raíz del proyecto configura `pythonpath = src`, l
 
 ## Licencia
 
-Proyecto académico — Master en Deep Learning, Abril–Mayo 2026.
+Proyecto de MLOPS - Master en Deep Learning - Mayo 2026.
