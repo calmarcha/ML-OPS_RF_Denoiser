@@ -7,9 +7,9 @@
 
 Este proyecto es para la eliminación del ruido rosa en la voz demodulada en radiocomunicaciones, mediante un modelo Transformer entrenado con diferentes ficheros de audio con voces y ruido rosa, aplicando buenas prácticas de MLOps. 
 
-Se ha refactorizado el código original del notebook a una estructura modular con scripts independientes para cada componente del pipeline (carga de datos, modelo, entrenamiento, evaluación, visualización, exportación).
+El código original estaba en un notebook y se ha refactorizado a una estructura modular con scripts independientes para cada componente del pipeline (carga de datos, modelo, entrenamiento, evaluación, visualización, exportación).
 
-Por otro lado, se ha integrado la gestión de experimentos con Weights & Biases y el control de versiones con GitHub. Además, se han implementado tests automatizados con pytest para validar la funcionalidad del procesado de audio y el dataset. El proyecto también incluye un Dockerfile para construir una imagen reproducible con todo el pipeline, aunque por la naturaleza del proyecto, no se desplegará ningún contenedor en la nube.
+Por otro lado, se ha integrado la gestión de experimentos con Weights & Biases y el control de versiones con GitHub. Además, se han implementado 4 tests automatizados con pytest para validar la funcionalidad del procesado de audio y el dataset. El proyecto también incluye un Dockerfile para construir una imagen reproducible con todo el pipeline, aunque por la naturaleza del proyecto, no se desplegará ningún contenedor en la nube.
 
 ---
 
