@@ -31,7 +31,7 @@ https://drive.google.com/file/d/1hZGg2p45JCG2XPCO9fY5kdp70Z4HYwWR/view?usp=drive
 
 - **GitHub**: Plataforma de control de versiones basada en Git. Permite versionar el código, gestionar ramas, revisar cambios y colaborar en equipo.
 
-- **Weights & Biases (W&B)**: Plataforma de MLOps para el seguimiento de experimentos. Registra automáticamente hiperparámetros, métricas por época (pérdida de entrenamiento y validación), tiempos de inferencia y resultados de test, para la comparación de experimentos. En nuestro proyecto, se han guardado 3 experimentos (runs) probando diferentes valores de batch size (8, 16 y 32).
+- **Weights & Biases (W&B)**: Plataforma de MLOps para la comparación de experimentos. Registra automáticamente hiperparámetros, métricas por época (pérdida de entrenamiento y validación), tiempos de inferencia y resultados de tests. En nuestro proyecto, se han guardado 3 experimentos (runs) probando diferentes valores de batch size (8, 16 y 32).
 
 - **Docker**: Herramienta de contenedorización que empaqueta la aplicación junto con todas sus dependencias en una imagen reproducible. Garantiza que el pipeline se ejecute de forma idéntica en cualquier entorno (local, servidor, nube). Por la naturaleza de nuestro proyecto, no se desplegará ningún contenedor en la nube, pero se incluye un Dockerfile para construir una imagen con el pipeline completo.
 
