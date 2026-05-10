@@ -29,17 +29,17 @@ https://drive.google.com/file/d/1hZGg2p45JCG2XPCO9fY5kdp70Z4HYwWR/view?usp=drive
 
 ## Herramientas vistas en MLOps utilizadas:
 
-- **GitHub**: Plataforma de control de versiones distribuido basada en Git. Permite versionar el código, gestionar ramas, revisar cambios y colaborar en equipo. En este proyecto se usa para alojar el repositorio.
+- **GitHub**: Plataforma de control de versiones basada en Git. Permite versionar el código, gestionar ramas, revisar cambios y colaborar en equipo.
 
-- **Weights & Biases (W&B)**: Plataforma de MLOps para el seguimiento de experimentos. Registra automáticamente hiperparámetros, métricas por época (pérdida de entrenamiento y validación), tiempos de inferencia y resultados de test, facilitando la comparación de experimentos. En nuestro proyecto, se han guardado 3 experimentos (runs) probando diferentes valores de batch size.
+- **Weights & Biases (W&B)**: Plataforma de MLOps para el seguimiento de experimentos. Registra automáticamente hiperparámetros, métricas por época (pérdida de entrenamiento y validación), tiempos de inferencia y resultados de test, para la comparación de experimentos. En nuestro proyecto, se han guardado 3 experimentos (runs) probando diferentes valores de batch size (8, 16 y 32).
 
 - **Docker**: Herramienta de contenedorización que empaqueta la aplicación junto con todas sus dependencias en una imagen reproducible. Garantiza que el pipeline se ejecute de forma idéntica en cualquier entorno (local, servidor, nube). Por la naturaleza de nuestro proyecto, no se desplegará ningún contenedor en la nube, pero se incluye un Dockerfile para construir una imagen con el pipeline completo.
 
-- **Pytest**: Framework de testing para Python. Se utiliza para ejecutar la suite de tests automatizados de `src/data.py`, verificando el procesado de audio, la generación de espectrogramas y el comportamiento del dataset. Los tests se ejecutan con `pytest tests/ -v` y el fichero `pytest.ini` configura `pythonpath = src` para buscar los móulos para ejecutar los tests. En nuestro proyecto, se han implementado 4 tests unitarios para validar la correcta generación de espectrogramas y la funcionalidad del dataset.
+- **Pytest**: Framework de testing para Python. Se utiliza para ejecutar la suite de tests automatizados de `src/data.py`, verificando el procesado de audio, la generación de espectrogramas y el comportamiento del dataset. Los tests se ejecutan con `pytest tests/ -v` y el fichero `pytest.ini` configura `pythonpath = src` para buscar los móulos para ejecutar los tests. En nuestro proyecto, se han implementado 4 tests para validar la correcta generación de espectrogramas y la funcionalidad del dataset.
 
 ---
 
-## Descripción
+## Descripción del sistema
 
 El sistema procesa señales de audio en el **dominio de la frecuencia** (espectrogramas de magnitud). El modelo Transformer opera sobre los 257 bins de la STFT (Short Time Fourier Transform) y elimina el ruido aplicando atención con 4 cabezas.
 
@@ -49,18 +49,16 @@ El sistema procesa señales de audio en el **dominio de la frecuencia** (espectr
 - **Cabezas de atención**: 4
 - **Capas Transformer**: 4
 
-El modelo se entrena con **PyTorch Lightning**, se monitoriza con **Weights & Biases** y toda **la configuración reside en un fichero YAML**.
+El modelo se entrena con **PyTorch Lightning**, se monitoriza con **Weights & Biases** y toda **la configuración reside en el fichero `config/configuration.yaml`**.
 
 ---
 
 ## Estructura del proyecto
 
-```
 Originalmente el proyecto estaba contenido en un único notebook, pero aplicando buenas prácticas de MLOps se ha refactorizado a una estructura modular. El código fuente se encuentra en `src/`, los tests en `tests/` y los resultados generados (CSVs, figuras) en `results/`. Los datos de entrenamiento, checkpoints, modelos exportados, logs y runs de W&B están excluidos del repositorio por contener ficheros binarios grandes o datos que se considera mejor no subir a GitHub.
 
-``` 
- - config/
-  - configuration.yaml   # Fuente única de verdad: hiperparámetros y rutas
+- config/
+  - configuration.yaml   # Contiene los hiperparámetros y rutas
 - src/
   - config.py            # Carga configuration.yaml y expone constantes
   - data.py              # Carga de audio, espectrogramas y Dataset
@@ -80,13 +78,11 @@ Originalmente el proyecto estaba contenido en un único notebook, pero aplicando
 - requirements.txt       # Requisitos del proyecto
 - .env.example           # Clave de API de Weights & Biases
 
-```
-
 Algunos directorios como `.venv/`, `training_data/`, `checkpoints/`, `models/`, `logs/`, `wandb/`, ...etc, están excluidos del repositorio por contener ficheros binarios grandes o datos que no se desea subir.
 
 ---
 
-## Requisitos
+## Requisitos Python y CUDA
 
 - Python 3.10+
 - CUDA 11.8+ recomendado (el código funciona también en CPU)
@@ -122,7 +118,7 @@ audio:
   sample_rate: 16000
   n_fft: 512
   hop_length: 256
-  segment_length: 2       # segundos por segmento
+  segment_length: 2       # segundos por segmento antes del muestreo
 
 training:
   batch_size: 8
@@ -142,23 +138,13 @@ models:
 
 ### 2. Clave API de W&B — `.env`
 
-Copiar la plantilla y añadir la clave:
-
-```bash
-cp .env.example .env
-```
-
-Editar `.env`:
-
-```
-WANDB_API_KEY=la_clave_api_aquí
-```
-
 Clave obtenida en [wandb.ai/settings](https://wandb.ai/settings).
+
+La clave API de Weights & Biases está guardada en el fichero `.env` en la raíz del proyecto.
 
 ### 3. Datos de entrenamiento
 
-Colocar los ficheros de audio en `training_data/` con los nombres indicados en `config/configuration.yaml` (sección `data`).
+En el proyecto completo subido a `Google Drive` existe la carpeta `training_data` con ficheros de audio de ruido puro y de voces limpias de diferentes duraciones (360s, 1080s y 1800s).
 
 ---
 
@@ -274,10 +260,10 @@ pytest tests/ -v
 ```
 
 - Fichero: `tests/test_data.py`
-- Módulo bajo prueba: `src/data.py`
+- Módulo a probar: `src/data.py`
 - Nº de tests: 4
 
-El fichero `pytest.ini` en la raíz del proyecto configura `pythonpath = src`, lo que permite a pytest hacer las importaciones sin necesidad de ficheros adicionales.
+El fichero `pytest.ini` en la raíz del proyecto contiene `pythonpath = src`.
 
 ### `test_data.py`
 
@@ -288,6 +274,4 @@ El fichero `pytest.ini` en la raíz del proyecto configura `pythonpath = src`, l
 
 ---
 
-## Licencia
-
-Proyecto de MLOPS - Master en Deep Learning - Mayo 2026.
+## Proyecto de MLOPS - Master en Deep Learning - Mayo 2026.
